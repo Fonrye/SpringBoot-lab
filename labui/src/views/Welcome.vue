@@ -1,0 +1,26 @@
+ <template>
+  <div>
+    <h1>Welcome {{userId}}!</h1>
+	
+  </div>
+</template>
+<script>
+	
+export default {
+  data() {
+    return {
+	  userId:this.$session.get("userId"),
+      msg: this.$route.query.data,
+	  
+    };
+  }
+//   data() { //这种方式也可以
+//     return {
+//       msg: null
+//     };
+//   },
+  // created() {
+  //   this.msg = this.$route.query.data;
+  // }
+}
+</script>

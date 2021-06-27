@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.lab.mapper.DailyMapper">
+
+    <resultMap type="Dailyjob" id="DailyResult">
+        <id property="id" column="id"/>
+        <result property="weekly" column="weekly"/>
+        <result property="time" column="time"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="content" column="content"/>
+        <result property="systemTime" column="systemTime"/>
+
+    </resultMap>
+
+    <select id="getLogByDatetime" parameterType="Dailyjob" resultMap="DailyResult">
+    select * from dailyjob where time = #{time}
+    </select>
+
+    <select id="getList" parameterType="Dailyjob" resultMap="DailyResult">
+		select * from dailyjob
+	</select>
+
+    <select id="getListByAssitantId" parameterType="Dailyjob" resultMap="DailyResult">
+		select * from dailyjob where user_id = #{userId}
+	</select>
+
+    <insert id="save" parameterType="Dailyjob" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO dailyjob(weekly, time, user_id, content,systemTime) VALUES (#{weekly}, #{time}, #{userId}, #{content},#{systemTime})
+	</insert>
+
+    <update id="updateById" parameterType="Dailyjob">
+		UPDATE dailyjob set weekly=#{weekly}, content = #{content}WHERE id=#{id}
+	</update>
+
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.lab.mapper.UserRoleMapper">
+
+    <resultMap type="UserRole" id="UserRoleResult">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="roleId" column="role_id"/>
+    </resultMap>
+
+    <update id="toAssitant" parameterType="UserRole">
+		UPDATE user_role set role_id=#{roleId} WHERE user_id=#{userId}
+	</update>
+
+    <update id="updateUserRoleById" parameterType="UserRole">
+		UPDATE user_role set role_id=#{roleId} WHERE user_id=#{userId}
+	</update>
+
+    <insert id="addUserRole" parameterType="UserRole">
+		INSERT INTO user_role(user_id, role_id) VALUES (#{userId}, #{roleId})
+	</insert>
+</mapper>

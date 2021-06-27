@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.lab.mapper.UserMapper">
+
+    <resultMap type="User" id="UserResult">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="pwd" column="pwd"/>
+        <result property="picture" column="picture"/>
+        <result property="roleId" column="role_id"/>
+        <result property="sectionId" column="section_id"/>
+    </resultMap>
+
+    <resultMap type="Role" id="RoleResult">
+        <id property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+    </resultMap>
+    <resultMap type="UserRole" id="UserRoleResult">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="roleId" column="role_id"/>
+    </resultMap>
+
+<!--管理员管理所有用户-->
+    <select id="selectUserList" parameterType="User" resultMap="UserResult">
+		SELECT
+	        u.*,
+	        ur.role_id
+        FROM
+	      USER u
+            LEFT JOIN user_role ur ON u.user_id = ur.user_id
+	</select>
+	<!--	技术人员管理学生助理档案，把身份为2（助理）的人划入档案-->
+	<select id="selectUserList2" parameterType="User" resultMap="UserResult">
+		SELECT * FROM `user` u ,user_role ur WHERE u.user_id=ur.user_id AND ur.role_id=2
+	</select>
+
+
+	<!--用于学生自己申请-->
+    <insert id="addUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO user(user_id, user_name, pwd, picture, major, college, clas, phone, email, grade) VALUES (#{userId}, #{userName}, #{pwd}, #{picture}, #{major}, #{college}, #{clas}, #{phone}, #{email}, #{grade})
+	</insert>
+<!--	用于管理员添加用户-->
+	<insert id="addUser2" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO user(user_id, user_name, pwd) VALUES (#{userId}, #{userName}, #{pwd})
+	</insert>
+
+
+    <delete id="deleteUserById" parameterType="String">
+		DELETE user,
+ 			user_role
+				FROM
+			user LEFT JOIN user_role ON user .user_id = user_role.user_id
+				WHERE user.user_id = #{userId}
+	</delete>
+
+
+    <update id="updateById" parameterType="User">
+		UPDATE user set user_name=#{userName} , pwd=#{pwd}, section_id=#{sectionId} WHERE user_id=#{userId} 
+	</update>
+
+    <select id="getUserByid" parameterType="User" resultMap="UserResult">
+		SELECT * FROM user WHERE id = #{Id} 
+	</select>
+
+
+    <select id="checkLogin" resultMap="UserResult">
+		SELECT
+				u.*, ur.role_id
+			FROM
+				user u,
+				role r,
+				user_role ur
+			WHERE
+				u.user_id = #{userId} AND u.pwd = #{pwd}
+			AND u.user_id = ur.user_id
+			AND ur.role_id = r.role_id
+
+
+	</select>
+    <select id="checkUserRole" parameterType="String" resultMap="UserRoleResult">
+          SELECT * FROM user_role WHERE user_id = #{userId,jdbcType = VARCHAR}
+
+	</select>
+
+
+</mapper>

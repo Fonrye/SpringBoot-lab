@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.lab.mapper.RecruitMapper">
+
+    <resultMap type="Recruitment" id="RecruitResult">
+        <id property="id" column="id"/>
+        <result property="planName" column="plan_name"/>
+        <result property="required" column="required"/>
+        <result property="requireNum" column="require_num"/>
+        <result property="sectionId" column="section_id"/>
+        <result property="labId" column="lab_id"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+
+    <select id="getList" parameterType="Recruitment" resultMap="RecruitResult">
+		select * from recruitment
+	</select>
+
+    <select id="stuGetList" parameterType="Recruitment" resultMap="RecruitResult">
+		select * from recruitment where status='2'
+	</select>
+
+    <select id="getRecruitById" parameterType="Recruitment" resultMap="RecruitResult">
+		select * from recruitment WHERE id=#{id}
+	</select>
+    <delete id="deleteById" parameterType="Integer">
+		DELETE FROM recruitment WHERE id = #{id}
+	</delete>
+
+    <update id="updateById" parameterType="Recruitment">
+		UPDATE recruitment set plan_name=#{planName} , required=#{required}, require_num=#{requireNum} WHERE id=#{id}
+	</update>
+    <update id="requestNum" parameterType="Recruitment">
+		UPDATE recruitment set require_num=#{requireNum} WHERE id=#{id}
+	</update>
+
+    <insert id="save" parameterType="Recruitment" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO recruitment(plan_name, required, require_num, section_id, lab_id) VALUES (#{planName}, #{required}, #{requireNum}, #{sectionId}, #{labId})
+	</insert>
+
+    <update id="checkupdateById" parameterType="Recruitment">
+		UPDATE recruitment set status=#{status} WHERE id=#{id}
+	</update>
+
+</mapper>
